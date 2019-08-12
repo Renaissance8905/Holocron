@@ -31,6 +31,7 @@ struct PaginatableResponse<T: SWData>: Codable {
     
     mutating func addExisting(_ existingData: [T]) {
         results = existingData + results
+        
     }
     
 }

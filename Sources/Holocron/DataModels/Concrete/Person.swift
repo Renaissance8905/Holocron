@@ -1,6 +1,6 @@
 //
-//  File 2.swift
-//  
+//  Person.swift
+//  Holocron
 //
 //  Created by Chris Spradling on 8/8/19.
 //
