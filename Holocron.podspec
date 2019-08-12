@@ -20,7 +20,6 @@ s.source = { :git => "https://github.com/Renaissance8905/Holocron.git",
 s.framework = "Foundation"
 
 s.source_files = "Sources/**/*.{swift}"
-s.resources = "Sources/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
 
 s.swift_version = "5.1"
 
