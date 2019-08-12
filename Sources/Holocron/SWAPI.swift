@@ -11,7 +11,7 @@ public class SWAPI {
 
     internal let cache: SWCache?
     
-    init(cache: SWCache? = nil) {
+    public init(cache: SWCache? = nil) {
         self.cache = cache
         
     }
