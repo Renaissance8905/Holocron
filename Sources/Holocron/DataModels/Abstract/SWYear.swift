@@ -5,8 +5,6 @@
 //  Created by Chris Spradling on 8/7/19.
 //
 
-import Foundation
-
 public enum SWYear: CustomStringConvertible, Codable {
     
     private static let ABYLiteral = "ABY"

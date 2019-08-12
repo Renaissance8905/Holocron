@@ -5,8 +5,6 @@
 //  Created by Chris Spradling on 8/8/19.
 //
 
-import Foundation
-
 public struct Planet: SWData {
     public var metaData: SWMetaData<Planet>
     

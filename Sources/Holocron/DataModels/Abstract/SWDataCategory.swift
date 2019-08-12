@@ -5,9 +5,6 @@
 //  Created by Chris Spradling on 8/7/19.
 //
 
-import Foundation
-
-
 public enum SWDataCategory: String {
     
     case people     = "people"
