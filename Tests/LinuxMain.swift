@@ -1,7 +1,7 @@
 import XCTest
 
-import HolocronPackageTests
+import HolocronTests
 
 var tests = [XCTestCaseEntry]()
-tests += HolocronPackageTests.allTests()
+tests += HolocronTests.allTests()
 XCTMain(tests)
