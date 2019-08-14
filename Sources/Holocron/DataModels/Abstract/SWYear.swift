@@ -83,7 +83,11 @@ public enum SWYear: CustomStringConvertible, Codable {
     }
     
     public var description: String {
-        return "\(relativeYear)\(era)"
+        let yearString = relativeYear.truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", relativeYear)
+            : String(relativeYear)
+        
+        return "\(yearString) \(era)"
         
     }
     

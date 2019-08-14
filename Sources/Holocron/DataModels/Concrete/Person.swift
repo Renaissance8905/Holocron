@@ -10,9 +10,9 @@ public struct Person: SWData, Identifiable {
     
     public var name: String
     public var birthYear: SWYear?
-    public var eyeColor: String
-    public var gender: String
-    public var hairColor: String
+    @Known public var eyeColor: String?
+    @Known public var gender: String?
+    @Known public var hairColor: String?
     public var height: Centimeters?
     public var mass: Kilograms?
     public var skinColor: String
