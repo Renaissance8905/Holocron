@@ -84,7 +84,7 @@ extension SWAPI {
         
     }
     
-    private func fetchAll<T:SWData>(_ url: URL, limit: Int? = nil, existingData: [T] = [], completion: @escaping SWCollectionCompletion<T>) {
+    func fetchAll<T:SWData>(_ url: URL, limit: Int? = nil, existingData: [T] = [], completion: @escaping SWCollectionCompletion<T>) {
         
         codableRequest(url) { [weak self] (result: Result<PaginatableResponse<T>, SWError>) in
             guard let `self` = self else { return }
@@ -113,7 +113,7 @@ extension SWAPI {
         
     }
     
-    private func codableRequest<T: Codable>(_ url: URL, completion: @escaping (Result<T, SWError>) -> Void) {
+    func codableRequest<T: Codable>(_ url: URL, completion: @escaping (Result<T, SWError>) -> Void) {
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard let data = data else {
                 return completion(.failure(.noData))

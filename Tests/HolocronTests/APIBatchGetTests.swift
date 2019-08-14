@@ -67,7 +67,7 @@ final class APIBatchGetTests: HolocronTestCase {
         
         doAndWait { [weak self] waiter in
             
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Starship>) in
+            self?.api.get(limit: nil) { (data: SWCollectionResult<Starship>) in
                 switch data {
                 case .success(let object):
                     XCTAssertEqual(object.first?.name, "Executor")

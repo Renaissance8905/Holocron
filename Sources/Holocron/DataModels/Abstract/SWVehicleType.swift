@@ -8,11 +8,11 @@
 protocol SWVehicleType: SWData {
     var name: String                    { get }
     var model: String                   { get }
-    var length: Meters                  { get }
-    var costInCredits: String           { get }
-    var crew: String                    { get }
-    var passengers: String              { get }
-    var maxAtmospheringSpeed: String    { get }
+    var length: Meters?                 { get }
+    var costInCredits: Int?             { get }
+    var crew: Int?                      { get }
+    var passengers: Int?                { get }
+    var maxAtmospheringSpeed: Int?      { get }
     var cargoCapacity: Kilograms?       { get }
     var consumables: String             { get }
     var films: [SWPageLink]             { get }

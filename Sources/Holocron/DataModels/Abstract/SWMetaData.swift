@@ -7,30 +7,28 @@
 
 import Foundation
 
-public struct SWMetaData<T: SWData>: Codable {
+public struct SWMetaData: Codable {
     
     enum CodingKeys: String, CodingKey {
         case url, created, edited
     }
     
-    public var url: URL?
+    internal var url: SWPageLink
     public var created: Date?
     public var edited: Date?
-    public var identifier: SWDataCategory?
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         created = try? container.dateFromString(.created)
         edited  = try? container.dateFromString(.edited)
-        url     = URL(string: try container.decodeString(.url))
+        url     = try container.decode(SWPageLink.self, forKey: .url)
         
-        guard let identifier = SWDataCategory(T.self) else {
-            throw container.SWCustomError("Invalid SWData type \(String(describing: T.self))")
-        }
+    }
+    
+    public var identifier: String {
+        return url.endpoint
         
-        self.identifier = identifier
-
     }
 
 }

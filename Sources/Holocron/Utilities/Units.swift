@@ -7,5 +7,8 @@
 
 public typealias Centimeters = Double
 public typealias Meters = Double
+public typealias Kilometers = Double
 public typealias Kilograms = Double
-public typealias StandardYears = Int
+public typealias StandardYears = Double
+public typealias StandardDays = Double
+public typealias StandardHours = Double

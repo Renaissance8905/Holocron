@@ -5,8 +5,8 @@
 //  Created by Chris Spradling on 8/8/19.
 //
 
-public struct Species: SWData {
-    public var metaData: SWMetaData<Species>
+public struct Species: SWData, Identifiable {
+    public var metaData: SWMetaData
     
     public var name: String
     @Known public var classification: String?
@@ -42,17 +42,17 @@ public struct Species: SWData {
     }
     
     
-    func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
+    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
         api.fetchSet(films, completion)
         
     }
     
-    func getPeople(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
+    public func getPeople(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
         api.fetchSet(people, completion)
         
     }
     
-    func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
+    public func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
         guard let homeworld = homeworld else { return completion(.failure(.noData))}
         api.fetchOne(homeworld, completion)
         

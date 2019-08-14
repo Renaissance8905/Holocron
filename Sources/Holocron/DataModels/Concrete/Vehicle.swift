@@ -5,16 +5,16 @@
 //  Created by Chris Spradling on 8/8/19.
 //
 
-public struct Vehicle: SWVehicleType {
-    public var metaData: SWMetaData<Vehicle>
+public struct Vehicle: SWVehicleType, Identifiable {
+    public var metaData: SWMetaData
      
     public var name: String
     public var model: String
-    public var length: Meters
-    public var costInCredits: String
-    public var crew: String
-    public var passengers: String
-    public var maxAtmospheringSpeed: String
+    public var length: Meters?
+    public var costInCredits: Int?
+    public var crew: Int?
+    public var passengers: Int?
+    public var maxAtmospheringSpeed: Int?
     public var cargoCapacity: Kilograms?
     public var consumables: String
     internal var films: [SWPageLink]
@@ -23,6 +23,7 @@ public struct Vehicle: SWVehicleType {
     public var vehicleClass: String
     public var manufacturer: String
     
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -30,11 +31,11 @@ public struct Vehicle: SWVehicleType {
         
         name                    = try container.decodeString(.name)
         model                   = try container.decodeString(.model)
-        length                  = Meters(try container.decodeString(.length))!
-        costInCredits           = try container.decodeString(.costInCredits)
-        crew                    = try container.decodeString(.crew)
-        passengers              = try container.decodeString(.passengers)
-        maxAtmospheringSpeed    = try container.decodeString(.maxAtmospheringSpeed)
+        length                  = Meters(try container.decodeString(.length))
+        costInCredits           = Int(try container.decodeString(.costInCredits))
+        crew                    = Int(try container.decodeString(.crew))
+        passengers              = Int(try container.decodeString(.passengers))
+        maxAtmospheringSpeed    = Int(try container.decodeString(.maxAtmospheringSpeed))
         cargoCapacity           = Kilograms(try container.decodeString(.cargoCapacity))
         consumables             = try container.decodeString(.consumables)
         films                   = try container.decode([SWPageLink].self, forKey: .films)
@@ -45,12 +46,12 @@ public struct Vehicle: SWVehicleType {
         
     }
     
-    func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
+    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
         api.fetchSet(films, completion)
         
     }
     
-    func getPilots(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
+    public func getPilots(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
         api.fetchSet(pilots, completion)
         
     }

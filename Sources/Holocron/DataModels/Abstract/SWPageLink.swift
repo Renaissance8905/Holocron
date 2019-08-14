@@ -13,16 +13,21 @@ struct SWPageLink: Codable {
     let url: URL
     
     init<T:SWData>(_ type: T.Type, identifier: Int? = nil) throws {
-        self.category = SWDataCategory(type)!
-        self.identifier = identifier
         
-        guard var url = URL(string: SWAPIBaseURLString) else { throw SWError.invalidURL }
+        guard
+            let category = SWDataCategory(type),
+            var url = URL(string: SWAPIBaseURLString)
+        else { throw SWError.invalidURL }
+        
         url.appendPathComponent(category.rawValue)
         if let id = identifier {
             url.appendPathComponent(String(id))
         }
         
+        self.category = category
+        self.identifier = identifier
         self.url = url
+        
     }
     
     init?(_ string: String) {
@@ -38,9 +43,9 @@ struct SWPageLink: Codable {
             let url = URL(string: string)
         else { return nil }
         
-        self.category = category
+        self.category   = category
         self.identifier = endpoint.count > 1 ? Int(endpoint[1]) : nil
-        self.url = url
+        self.url        = url
         
     }
     
@@ -59,6 +64,24 @@ struct SWPageLink: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(url.absoluteString)
+        
+    }
+    
+    var endpoint: String {
+        let category = self.category.rawValue
+        guard let id = identifier else {
+            return category
+        }
+        
+        return [category, String(id)].joined(separator: "/")
+    }
+    
+    func url(with searchTerm: String) -> URL {
+        
+        var components = URLComponents(string: url.absoluteString)
+        components?.queryItems = [URLQueryItem(name: "search", value: searchTerm)]
+        
+        return components?.url ?? url
         
     }
     

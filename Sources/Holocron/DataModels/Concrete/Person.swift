@@ -5,8 +5,8 @@
 //  Created by Chris Spradling on 8/8/19.
 //
 
-public struct Person: SWData {
-    public var metaData: SWMetaData<Person>
+public struct Person: SWData, Identifiable {
+    public var metaData: SWMetaData
     
     public var name: String
     public var birthYear: SWYear?
@@ -41,22 +41,22 @@ public struct Person: SWData {
         
     }
     
-    func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
+    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
         api.fetchSet(films, completion)
         
     }
     
-    func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
+    public func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
         api.fetchSet(species, completion)
         
     }
     
-    func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
+    public func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
         api.fetchSet(vehicles, completion)
         
     }
     
-    func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
+    public func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
         guard let homeworld = homeworld else { return completion(.failure(.noData)) }
         api.fetchOne(homeworld, completion)
         

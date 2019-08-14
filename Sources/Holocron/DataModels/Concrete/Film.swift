@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct Film: SWData {
-    var metaData: SWMetaData<Film>
+public struct Film: SWData, Identifiable {
+    public var metaData: SWMetaData
     
     public var name: String { return title }
     
@@ -41,22 +41,22 @@ public struct Film: SWData {
         
     }
     
-    func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
+    public func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
         api.fetchSet(species, completion)
         
     }
     
-    func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
+    public func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
         api.fetchSet(vehicles, completion)
         
     }
     
-    func getCharacters(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
+    public func getCharacters(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
         api.fetchSet(characters, completion)
         
     }
     
-    func getPlanets(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Planet>) {
+    public func getPlanets(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Planet>) {
         api.fetchSet(planets, completion)
         
     }
