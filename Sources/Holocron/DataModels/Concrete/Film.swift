@@ -43,7 +43,7 @@ public struct Film: SWData, Identifiable {
         
     }
     
-    var releaseDateString: String {
+    public var releaseDateString: String {
         return DateFormatter.dateOnly.string(from: releaseDate)
     }
     
