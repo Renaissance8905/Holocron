@@ -23,6 +23,10 @@ extension SWAPI {
     
     func fetchSet<T:SWData>(_ links: [SWPageLink], _ completion: @escaping SWCollectionCompletion<T>) {
         
+        guard !links.isEmpty else {
+            return completion(.failure(.noData))
+        }
+        
         let group = DispatchGroup()
         let serial = DispatchQueue(label: "SWAPI.fetchSet.serialQueue")
         
@@ -35,7 +39,9 @@ extension SWAPI {
             
             fetchOne(link) { (result: SWResult<T>) in
                 serial.sync {
+                    
                     switch result {
+                        
                     case .success(let item):
                         resultSet.append(item)
                         
@@ -47,6 +53,7 @@ extension SWAPI {
                     group.leave()
 
                 }
+                
             }
             
         }
@@ -62,6 +69,7 @@ extension SWAPI {
                 return completion(.success(resultSet))
                 
             }
+            
         }
         
     }
@@ -69,7 +77,7 @@ extension SWAPI {
     func fetchOne<T:SWData>(_ link: SWPageLink, _ completion: @escaping SWCompletion<T>) {
         
         if let cached: T = cache?.object(for: link.identifier) {
-            completion(.success(cached))
+            return completion(.success(cached))
         }
         
         codableRequest(link.url) { [weak self] (result: SWResult<T>) in
