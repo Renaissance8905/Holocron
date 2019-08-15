@@ -84,4 +84,88 @@ final class APIGranularFetchingTests: HolocronTestCase {
                 
     }
     
+    func testGetSeveralSets() {
+        
+        doAndWait { [weak self] waiter in
+            self?.api.getPeople({ (result) in
+                switch result {
+                case .success(let people):
+                    
+                    guard let `self` = self, let anakin = people.first(where: { $0.name == "Anakin Skywalker" }) else {
+                        XCTFail("No Anakin?")
+                        return
+                    }
+                    
+                    let dispatch = DispatchGroup()
+                    
+                    var stuff = [SWData]()
+                    
+                    dispatch.enter()
+                    anakin.getFilms(self.api) { result in
+                        switch result {
+                        case .success(let data):
+                            stuff.append(contentsOf: data)
+                            dispatch.leave()
+                            
+                        case .failure(let error):
+                            XCTFail(error.localizedDescription)
+                            
+                        }
+                    }
+
+                    dispatch.enter()
+                    anakin.getVehicles(self.api) { result in
+                        switch result {
+                        case .success(let data):
+                            stuff.append(contentsOf: data)
+                            dispatch.leave()
+                            
+                        case .failure(let error):
+                            XCTFail(error.localizedDescription)
+                            
+                        }
+                    }
+
+                    dispatch.enter()
+                    anakin.getStarships(self.api) { result in
+                        switch result {
+                        case .success(let data):
+                            stuff.append(contentsOf: data)
+                            dispatch.leave()
+                            
+                        case .failure(let error):
+                            XCTFail(error.localizedDescription)
+                            
+                        }
+                    }
+
+                    dispatch.enter()
+                    anakin.getHomeworld(self.api) { result in
+                        switch result {
+                        case .success(let data):
+                            stuff.append(data)
+                            dispatch.leave()
+                            
+                        case .failure(let error):
+                            XCTFail(error.localizedDescription)
+                            
+                        }
+                    }
+                    
+                    dispatch.notify(queue: .main) {
+                        print(stuff.compactMap({ $0.name }))
+                        print(stuff.count)
+                        XCTAssertEqual(stuff.count, 9)
+                        waiter.fulfill()
+                    }
+
+                    
+                case .failure(let error):
+                    XCTFail(error.localizedDescription)
+                }
+            })
+        }
+        
+    }
+    
 }

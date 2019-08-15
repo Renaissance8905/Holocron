@@ -34,20 +34,19 @@ extension SWAPI {
             group.enter()
             
             fetchOne(link) { (result: SWResult<T>) in
-                
-                switch result {
-                case .success(let item):
-                    serial.sync {
+                serial.sync {
+                    switch result {
+                    case .success(let item):
                         resultSet.append(item)
+                        
+                    case .failure(let error):
+                        errors.append(error)
+                        
                     }
                     
-                case .failure(let error):
-                    serial.sync {
-                        errors.append(error)
-                    }
+                    group.leave()
+
                 }
-                
-                group.leave()
             }
             
         }
