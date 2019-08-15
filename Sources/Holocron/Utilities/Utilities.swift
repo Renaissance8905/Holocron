@@ -14,10 +14,10 @@ public protocol SWData: Codable {
 @available(iOS 13.0, *)
 public extension SWData where Self: Identifiable {
     
-    typealias ID = String
+    typealias ID = SWIdentifier
     
-    var id: String {
-        return metaData.identifier
+    var id: SWIdentifier {
+        return metaData.url.identifier
         
     }
     

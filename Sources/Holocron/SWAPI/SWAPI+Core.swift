@@ -24,6 +24,7 @@ extension SWAPI {
     func fetchSet<T:SWData>(_ links: [SWPageLink], _ completion: @escaping SWCollectionCompletion<T>) {
         
         let group = DispatchGroup()
+        let serial = DispatchQueue(label: "SWAPI.fetchSet.serialQueue")
         
         var resultSet: [T] = []
         var errors: [SWError] = []
@@ -36,10 +37,14 @@ extension SWAPI {
                 
                 switch result {
                 case .success(let item):
-                    resultSet.append(item)
+                    serial.sync {
+                        resultSet.append(item)
+                    }
                     
                 case .failure(let error):
-                    errors.append(error)
+                    serial.sync {
+                        errors.append(error)
+                    }
                 }
                 
                 group.leave()
@@ -48,31 +53,36 @@ extension SWAPI {
         }
         
         group.notify(queue: .main) {
-            
-            if let error = errors.first {
-                return completion(.failure(error))
+            serial.sync {
+                
+                if let error = errors.first {
+                    return completion(.failure(error))
+                    
+                }
+                
+                return completion(.success(resultSet))
                 
             }
-            
-            return completion(.success(resultSet))
-            
         }
         
     }
     
     func fetchOne<T:SWData>(_ link: SWPageLink, _ completion: @escaping SWCompletion<T>) {
         
-        if let cached: T = cache?.object(for: link) {
-            return completion(.success(cached))
+        if let cached: T = cache?.object(for: link.identifier) {
+            completion(.success(cached))
         }
         
-        codableRequest(link.url, completion: completion)
+        codableRequest(link.url) { [weak self] (result: SWResult<T>) in
+            if case .success(let data) = result { self?.cache?.add(data) }
+            completion(result)
+        }
         
     }
     
-    func fetchOne<T:SWData>(_ identifier: Int, _ completion: @escaping SWCompletion<T>) {
+    func fetchOne<T:SWData>(_ index: Int, _ completion: @escaping SWCompletion<T>) {
         do {
-            fetchOne(try SWPageLink(T.self, identifier: identifier), completion)
+            fetchOne(try SWPageLink(T.self, index: index), completion)
             
         } catch let error as SWError {
             completion(.failure(error))
@@ -100,6 +110,7 @@ extension SWAPI {
                 switch self.checkLimit(limit, next: response.next, data: resultSet) {
 
                 case .finished(let finalResults):
+                    finalResults.forEach { self.cache?.add($0) }
                     return completion(.success(finalResults))
 
                 case .continue(let next):

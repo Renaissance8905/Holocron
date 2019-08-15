@@ -9,11 +9,11 @@ import Foundation
 
 public class SWAPI {
 
-    internal let cache: SWCache?
+    internal let cache: SWCacheProtocol?
     internal let timeout: TimeInterval = 4.0
     
-    public init(cache: SWCache? = nil) {
-        self.cache = cache
+    public init(cache: SWCacheProtocol? = nil) {
+        self.cache = cache ?? SWInMemoryCache()
         
     }
     

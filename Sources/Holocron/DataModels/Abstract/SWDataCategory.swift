@@ -5,7 +5,7 @@
 //  Created by Chris Spradling on 8/7/19.
 //
 
-public enum SWDataCategory: String {
+enum SWDataCategory: String {
     
     case people     = "people"
     case films      = "films"
@@ -27,7 +27,7 @@ public enum SWDataCategory: String {
         
     }
     
-    init?(_ type: SWData.Type) {
+    init(_ type: SWData.Type) throws {
         switch type {
         case is Person.Type:    self = .people
         case is Film.Type:      self = .films
@@ -35,7 +35,7 @@ public enum SWDataCategory: String {
         case is Vehicle.Type:   self = .vehicles
         case is Species.Type:   self = .species
         case is Planet.Type:    self = .planets
-        default:                return nil
+        default:                throw SWError.invalidURL
             
         }
         

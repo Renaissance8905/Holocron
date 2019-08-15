@@ -13,7 +13,7 @@ final class APIGranularFetchingTests: HolocronTestCase {
         
     func testGetSingle() {
         do {
-            let link = try SWPageLink(Person.self, identifier: 9)
+            let link = try SWPageLink(Person.self, index: 9)
             
             doAndWait { [weak self] waiter in
                 
@@ -41,7 +41,7 @@ final class APIGranularFetchingTests: HolocronTestCase {
     
     func testGetSet() {
         do {
-            let link = try SWPageLink(Person.self, identifier: 1)
+            let link = try SWPageLink(Person.self, index: 1)
             
             doAndWait { [weak self] waiter in
                 

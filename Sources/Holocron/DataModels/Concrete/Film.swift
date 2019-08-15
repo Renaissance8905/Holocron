@@ -15,8 +15,8 @@ public struct Film: SWData, Identifiable {
     public var title: String
     public var episodeId: Int
     public var openingCrawl: String
-    public var director: String
-    public var producer: String
+    public var director: [String]
+    public var producer: [String]
     public var releaseDate: Date
     private var species: [SWPageLink]
     private var vehicles: [SWPageLink]
@@ -32,8 +32,8 @@ public struct Film: SWData, Identifiable {
         title           = try container.decodeString(.title)
         episodeId       = try container.decode(Int.self, forKey: .episodeId)
         openingCrawl    = try container.decodeString(.openingCrawl)
-        director        = try container.decodeString(.director)
-        producer        = try container.decodeString(.producer)
+        director        = try container.arrayFromString(.director)
+        producer        = try container.arrayFromString(.producer)
         releaseDate     = try container.dateFromString(.releaseDate, formatter: .dateOnly)
         species         = try container.decode([SWPageLink].self, forKey: .species)
         vehicles        = try container.decode([SWPageLink].self, forKey: .vehicles)

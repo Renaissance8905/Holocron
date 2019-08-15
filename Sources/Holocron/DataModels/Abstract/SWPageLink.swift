@@ -9,24 +9,35 @@ import Foundation
 
 struct SWPageLink: Codable {
     let category: SWDataCategory
-    let identifier: Int?
+    let index: Int?
     let url: URL
+    let identifier: SWIdentifier
     
-    init<T:SWData>(_ type: T.Type, identifier: Int? = nil) throws {
-        
-        guard
-            let category = SWDataCategory(type),
-            var url = URL(string: SWAPIBaseURLString)
-        else { throw SWError.invalidURL }
-        
-        url.appendPathComponent(category.rawValue)
-        if let id = identifier {
-            url.appendPathComponent(String(id))
+    private static func url(type: String, index: Int?) throws -> URL {
+        guard var url = URL(string: SWAPIBaseURLString) else { throw SWError.invalidURL }
+        url.appendPathComponent(type)
+        if let index = index {
+            url.appendPathComponent(String(index))
         }
-        
-        self.category = category
+        return url
+    }
+    
+    init(_ identifier: SWIdentifier) throws {
+        guard let category = SWDataCategory(rawValue: identifier.type) else {
+            throw SWError.invalidURL
+        }
+        self.category   = category
         self.identifier = identifier
-        self.url = url
+        self.index      = identifier.index
+        self.url        = try SWPageLink.url(type: identifier.type, index: identifier.index)
+        
+    }
+    
+    init<T:SWData>(_ type: T.Type, index: Int? = nil) throws {
+        self.category   = try SWDataCategory(type)
+        self.index      = index
+        self.url        = try SWPageLink.url(type: category.rawValue, index: index)
+        self.identifier = SWIdentifier(type: category.rawValue, index: index)
         
     }
     
@@ -44,8 +55,9 @@ struct SWPageLink: Codable {
         else { return nil }
         
         self.category   = category
-        self.identifier = endpoint.count > 1 ? Int(endpoint[1]) : nil
+        self.index      = endpoint.count > 1 ? Int(endpoint[1]) : nil
         self.url        = url
+        self.identifier = SWIdentifier(type: category.rawValue, index: index)
         
     }
     
@@ -65,15 +77,6 @@ struct SWPageLink: Codable {
         var container = encoder.singleValueContainer()
         try container.encode(url.absoluteString)
         
-    }
-    
-    var endpoint: String {
-        let category = self.category.rawValue
-        guard let id = identifier else {
-            return category
-        }
-        
-        return [category, String(id)].joined(separator: "/")
     }
     
     func url(with searchTerm: String) -> URL {

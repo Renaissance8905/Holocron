@@ -7,6 +7,11 @@
 
 import Foundation
 
+public struct SWIdentifier: Hashable, Equatable {
+    var type: String
+    var index: Int?
+}
+
 public struct SWMetaData: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -26,9 +31,4 @@ public struct SWMetaData: Codable {
         
     }
     
-    public var identifier: String {
-        return url.endpoint
-        
-    }
-
 }
