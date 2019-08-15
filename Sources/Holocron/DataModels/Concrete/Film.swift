@@ -22,6 +22,7 @@ public struct Film: SWData, Identifiable {
     private var vehicles: [SWPageLink]
     private var characters: [SWPageLink]
     private var planets: [SWPageLink]
+    private var starships: [SWPageLink]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -38,7 +39,12 @@ public struct Film: SWData, Identifiable {
         vehicles        = try container.decode([SWPageLink].self, forKey: .vehicles)
         characters      = try container.decode([SWPageLink].self, forKey: .characters)
         planets         = try container.decode([SWPageLink].self, forKey: .planets)
+        starships       = try container.decode([SWPageLink].self, forKey: .starships)
         
+    }
+    
+    var releaseDateString: String {
+        return DateFormatter.dateOnly.string(from: releaseDate)
     }
     
     public func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
@@ -54,6 +60,10 @@ public struct Film: SWData, Identifiable {
     public func getCharacters(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
         api.fetchSet(characters, completion)
         
+    }
+
+    public func getStarships(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Starship>) {
+        api.fetchSet(starships, completion)
     }
     
     public func getPlanets(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Planet>) {

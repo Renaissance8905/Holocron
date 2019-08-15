@@ -14,9 +14,9 @@ public struct Planet: SWData, Identifiable {
     public var orbitalPeriod: StandardDays?
     public var gravity: String
     public var population: Int?
-    public var climate: String
+    public var climate: [String]
     public var terrain: [String]
-    private var surfaceWater: Double?
+    public var surfaceWater: Percentage?
     private var residents: [SWPageLink]
     private var films: [SWPageLink]
     
@@ -31,9 +31,9 @@ public struct Planet: SWData, Identifiable {
         orbitalPeriod = StandardDays(try container.decodeString(.orbitalPeriod))
         gravity = try container.decodeString(.gravity)
         population = Int(try container.decodeString(.population))
-        climate = try container.decodeString(.climate)
+        climate = try container.arrayFromString(.climate)
         terrain = try container.arrayFromString(.terrain)
-        surfaceWater = Double(try container.decodeString(.surfaceWater))
+        surfaceWater = Percentage(try container.decodeString(.surfaceWater))
         residents = try container.decode([SWPageLink].self, forKey: .residents)
         films = try container.decode([SWPageLink].self, forKey: .films)
         
@@ -48,10 +48,5 @@ public struct Planet: SWData, Identifiable {
         api.fetchSet(residents, completion)
         
     }
-    
-    public var percentSurfaceWater: Double {
-        return (surfaceWater ?? 0) / 100
         
-    }
-    
 }

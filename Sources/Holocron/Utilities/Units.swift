@@ -14,9 +14,27 @@ public typealias Kilograms = Double
 public typealias StandardYears = Double
 public typealias StandardDays = Double
 public typealias StandardHours = Double
+public typealias Percentage = Double
+
+
 
 extension Double {
     
+    private var numberFormatter: NumberFormatter {
+         let format = NumberFormatter()
+          format.numberStyle = .decimal
+          format.alwaysShowsDecimalSeparator = false
+          format.groupingSeparator = ","
+          format.decimalSeparator = "."
+          return format
+      }
+      
+    
+    var commaDelimited: String {
+        return numberFormatter.string(from: NSNumber(value: self)) ?? ""
+        
+    }
+
     public enum SWUnit {
         case centimeters
         case meters
@@ -25,9 +43,10 @@ extension Double {
         case standardYears
         case standardDays
         case standardHours
+        case percentage
         
         fileprivate func description(for value: Double) -> String {
-            return String(format: key(for: value), value.cleanString)
+            return String(format: key(for: value), value.commaDelimited)
             
         }
         
@@ -43,16 +62,12 @@ extension Double {
             case .standardYears:    return "%@ Standard Year\(plural)"
             case .standardDays:     return "%@ Standard Day\(plural)"
             case .standardHours:    return "%@ Standard Hour\(plural)"
-
+            case .percentage:       return "%@%%"
+                
             }
             
         }
                 
-    }
-    
-    fileprivate var cleanString: String {
-        return truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
-        
     }
     
     fileprivate var isSingular: Bool {
@@ -61,7 +76,16 @@ extension Double {
     }
     
     public func description(_ unit: SWUnit? = nil) -> String {
-        return unit?.description(for: self) ?? cleanString
+        return unit?.description(for: self) ?? commaDelimited
+        
+    }
+    
+}
+
+public extension Int {
+    
+    func description(_ unit: Double.SWUnit? = nil) -> String {
+        return Double(self).description(unit)
         
     }
     
