@@ -24,4 +24,60 @@ public extension SWAPI {
         
     }
     
+    func getAll(_ completion: ((Result<[SWData], SWError>) -> Void)?) {
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: "SWAPI.fetchAll.serialQueue")
+        
+        var resultSet: [SWData] = []
+        var errors: [SWError] = []
+        
+        func handler<T:SWData>() -> SWCollectionCompletion<T> {
+            return { result in
+                
+                queue.sync {
+                    switch result {
+                    case .success(let items):
+                        resultSet.append(contentsOf: items)
+                        
+                    case .failure(let error):
+                        errors.append(error)
+                    }
+                    
+                    group.leave()
+                    
+                }
+                
+            }
+            
+        }
+        
+        group.enter()
+        getPeople(handler())
+        group.enter()
+        getFilms(handler())
+        group.enter()
+        getStarships(handler())
+        group.enter()
+        getVehicles(handler())
+        group.enter()
+        getSpecies(handler())
+        group.enter()
+        getPlanets(handler())
+        
+        group.notify(queue: .main) {
+            queue.sync {
+                
+                if let error = errors.first {
+                    return completion(.failure(error))
+                    
+                }
+                
+                return completion(.success(resultSet))
+                
+            }
+            
+        }
+        
+    }
+    
 }

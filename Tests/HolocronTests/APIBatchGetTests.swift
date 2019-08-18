@@ -142,6 +142,28 @@ final class APIBatchGetTests: HolocronTestCase {
         
     }
     
+    func testGetEverything() {
+        doAndWait { [weak self] (waiter) in
+            self?.api.getAll { result in
+                
+                switch result {
+                    
+                case .success(let items):
+                    XCTAssertEqual(items.count, 268)
+                    
+                case .failure(let error):
+                    XCTFail(error.localizedDescription)
+                    
+                }
+                
+                waiter.fulfill()
+                
+            }
+            
+        }
+        
+    }
+    
 }
 
 
