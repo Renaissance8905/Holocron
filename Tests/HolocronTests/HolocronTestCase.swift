@@ -4,7 +4,7 @@ import XCTest
 class HolocronTestCase: XCTestCase {
     
     let api = {
-        return SWAPI()
+        return SWAPI() // init'ing without cache
     }()
     
     let maxTimeout: TimeInterval = 10.0

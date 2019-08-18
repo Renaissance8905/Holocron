@@ -60,7 +60,7 @@ public extension SWAPI {
         
     }
     
-    func getSpecies(identifier: Int, _ completion: @escaping SWCompletion<Species>) {
+    func getOneSpecies(identifier: Int, _ completion: @escaping SWCompletion<Species>) {
         fetchOne(identifier, completion)
         
     }

@@ -21,7 +21,7 @@ class SWInMemoryCache: SWCacheProtocol {
     private var vehicles    = Cacheable<Vehicle>(SWInMemoryCache.timeToLive)
     
     func object<T:SWData>(for identifier: SWIdentifier) -> T? {
-        queue.sync(flags: .barrier) {
+        queue.sync {
             return getCache(for: identifier)?.object(for: identifier)
             
         }
@@ -29,7 +29,7 @@ class SWInMemoryCache: SWCacheProtocol {
     }
     
     func contains<T: SWData>(_ item: T) -> Bool {
-        queue.sync(flags: .barrier) {
+        queue.sync {
             return getCache(for: type(of: item))?.contains(item) == true
             
         }
@@ -37,7 +37,7 @@ class SWInMemoryCache: SWCacheProtocol {
     }
     
     func add<T:SWData>(_ item: T) {
-        queue.sync(flags: .barrier) {
+        queue.sync {
             getCache(for: item.metaData.url.identifier)?.add(item)
 
         }

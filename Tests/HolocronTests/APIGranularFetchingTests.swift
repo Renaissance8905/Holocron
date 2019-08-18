@@ -153,8 +153,6 @@ final class APIGranularFetchingTests: HolocronTestCase {
                     }
                     
                     dispatch.notify(queue: .main) {
-                        print(stuff.compactMap({ $0.name }))
-                        print(stuff.count)
                         XCTAssertEqual(stuff.count, 9)
                         waiter.fulfill()
                     }

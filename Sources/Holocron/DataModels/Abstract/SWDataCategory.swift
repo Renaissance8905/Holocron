@@ -5,7 +5,7 @@
 //  Created by Chris Spradling on 8/7/19.
 //
 
-enum SWDataCategory: String {
+enum SWDataCategory: String, CaseIterable {
     
     case people     = "people"
     case films      = "films"

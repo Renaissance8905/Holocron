@@ -13,9 +13,15 @@ public class SWAPI {
     internal let timeout: TimeInterval = 4.0
     
     public init(cache: SWCacheProtocol? = nil) {
-        self.cache = cache ?? SWInMemoryCache()
+        self.cache = cache
         
     }
+    
+    public static let `default`: SWAPI = {
+        return SWAPI(cache: SWInMemoryCache())
+        
+    }()
+    
     
     internal lazy var decoder: JSONDecoder = {
         let decoder = JSONDecoder()
