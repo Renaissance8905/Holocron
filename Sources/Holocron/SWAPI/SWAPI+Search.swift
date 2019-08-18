@@ -68,11 +68,13 @@ public extension SWAPI {
             queue.sync {
                 
                 if let error = errors.first {
-                    return completion(.failure(error))
+                    completion?(.failure(error))
+                    return
                     
                 }
                 
-                return completion(.success(resultSet))
+                completion?(.success(resultSet))
+                return
                 
             }
             
