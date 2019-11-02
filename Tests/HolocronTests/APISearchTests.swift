@@ -21,7 +21,7 @@ final class APISearchTests: HolocronTestCase {
         
         doAndWait { [weak self] waiter in
             
-            self?.api.search(for: "sky") { (data: SWCollectionResult<Person>) in
+            self?.api.searchPeople(term: "sky") { data in
                 
                 switch data {
                 case .success(let object):
@@ -29,6 +29,31 @@ final class APISearchTests: HolocronTestCase {
                     
                 case .failure(let error):
                     XCTFail(error.localizedDescription)
+                }
+                
+                waiter.fulfill()
+                
+            }
+            
+        }
+        
+    }
+    
+    func testSearchAll() {
+        doAndWait { [weak self] (waiter) in
+            self?.api.searchAll(term: "sky") { result in
+                
+                switch result {
+                    
+                case .success(let items):
+                    items.forEach {
+                        print($0.name)
+                    }
+                    XCTAssertEqual(items.count, 4)
+                    
+                case .failure(let error):
+                    XCTFail(error.localizedDescription)
+                    
                 }
                 
                 waiter.fulfill()

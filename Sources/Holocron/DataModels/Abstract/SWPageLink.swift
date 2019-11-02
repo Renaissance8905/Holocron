@@ -79,7 +79,9 @@ struct SWPageLink: Codable {
         
     }
     
-    func url(with searchTerm: String) -> URL {
+    func url(with searchTerm: String?) -> URL {
+        
+        guard let searchTerm = searchTerm, !searchTerm.isEmpty else { return url }
         
         var components = URLComponents(string: url.absoluteString)
         components?.queryItems = [URLQueryItem(name: "search", value: searchTerm)]

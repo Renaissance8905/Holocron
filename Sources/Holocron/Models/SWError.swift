@@ -10,4 +10,15 @@ public enum SWError: Error {
     case noData
     case decodingError(DecodingError)
     case responseError(Error)
+    
+    init(_ error: Error) {
+        guard let swError = error as? SWError else {
+            self = .responseError(error)
+            return
+        }
+        
+        self = swError
+        
+    }
+    
 }

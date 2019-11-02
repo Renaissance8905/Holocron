@@ -9,10 +9,10 @@ import Foundation
 
 extension SWAPI {
     
-    func get<T:SWData>(limit: Int? = nil, _ completion: @escaping SWCollectionCompletion<T>) {
+    func get<T:SWData>(searchTerm: String? = nil, limit: Int? = nil, _ completion: @escaping SWCollectionCompletion<T>) {
         
         do {
-            fetchAll(try SWPageLink(T.self).url, limit: limit, completion: completion)
+            fetchAll(try SWPageLink(T.self).url(with: searchTerm), limit: limit, completion: completion)
             
         } catch {
             completion(.failure(.invalidURL))
@@ -33,45 +33,30 @@ extension SWAPI {
         var resultSet: [T] = []
         var errors: [SWError] = []
         
-        links.forEach { (link) in
-            
-            group.enter()
-            
-            fetchOne(link) { (result: SWResult<T>) in
-                serial.sync {
-                    
-                    switch result {
-                        
-                    case .success(let item):
-                        resultSet.append(item)
-                        
-                    case .failure(let error):
-                        errors.append(error)
-                        
-                    }
-                    
-                    group.leave()
-
-                }
-                
-            }
-            
-        }
-        
-        group.notify(queue: .main) {
+        let handler: SWCompletion<T> = { result in
             serial.sync {
-                
-                if let error = errors.first {
-                    return completion(.failure(error))
-                    
+                switch result {
+                case .success(let data):
+                    resultSet.append(data)
+                case .failure(let error):
+                    errors.append(error)
                 }
-                
-                return completion(.success(resultSet))
-                
+                group.leave()
             }
             
         }
         
+        links.forEach {
+            group.enter()
+            fetchOne($0, handler)
+            
+        }
+        
+        group.notify(queue: serial) { [weak self] in
+            self?.handleCompletion(resultSet, errors, completion)
+            
+        }
+
     }
     
     func fetchOne<T:SWData>(_ link: SWPageLink, _ completion: @escaping SWCompletion<T>) {
@@ -91,11 +76,8 @@ extension SWAPI {
         do {
             fetchOne(try SWPageLink(T.self, index: index), completion)
             
-        } catch let error as SWError {
-            completion(.failure(error))
-            
         } catch let error {
-            completion (.failure(SWError.responseError(error)))
+            completion (.failure(SWError(error)))
             
         }
         
