@@ -44,6 +44,7 @@ extension Double {
         case standardDays
         case standardHours
         case percentage
+        case credits
         case custom(String)
         
         fileprivate func description(for value: Double) -> String {
@@ -64,6 +65,7 @@ extension Double {
             case .standardDays:     return "%@ Standard Day\(plural)"
             case .standardHours:    return "%@ Standard Hour\(plural)"
             case .percentage:       return "%@%%"
+            case .credits:          return "%@ credit\(unit)"
             case .custom(let unit): return "%@ \(unit)"
                 
             }
