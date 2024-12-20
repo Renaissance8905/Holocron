@@ -7,20 +7,20 @@
 
 import Foundation
 
-public struct SWIdentifier: Hashable, Equatable {
-    var type: String
-    var index: Int?
+public struct SWIdentifier: Hashable, Equatable, Sendable {
+    let type: String
+    let index: Int?
 }
 
-public struct SWMetaData: Codable {
+public struct SWMetaData: Codable, Sendable {
     
     enum CodingKeys: String, CodingKey {
         case url, created, edited
     }
     
-    internal var url: SWPageLink
-    public var created: Date?
-    public var edited: Date?
+    internal let url: SWPageLink
+    public let created: Date?
+    public let edited: Date?
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

@@ -6,23 +6,23 @@
 //
 
 public struct Starship: SWVehicleType, Identifiable {
-    public var metaData: SWMetaData
+    public let metaData: SWMetaData
      
-    public var name: String
-    public var model: String
-    public var length: Meters?
-    public var costInCredits: Int?
-    public var crew: Int?
-    public var passengers: Int?
-    public var maxAtmospheringSpeed: Int?
-    public var cargoCapacity: Kilograms?
-    public var consumables: String
-    internal var films: [SWPageLink]
-    internal var pilots: [SWPageLink]
+    public let name: String
+    public let model: String
+    public let length: Meters?
+    public let costInCredits: Int?
+    public let crew: Int?
+    public let passengers: Int?
+    public let maxAtmospheringSpeed: Int?
+    public let cargoCapacity: Kilograms?
+    public let consumables: String
+    internal let films: [SWPageLink]
+    internal let pilots: [SWPageLink]
     
-    public var starshipClass: String
-    public var hyperdriveRating: String
-    public var MGLT: Double?
+    public let starshipClass: String
+    public let hyperdriveRating: String
+    public let MGLT: Double?
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

@@ -5,7 +5,7 @@
 //  Created by Chris Spradling on 8/7/19.
 //
 
-public enum SWYear: CustomStringConvertible, Codable {
+public enum SWYear: CustomStringConvertible, Codable, Sendable {
     
     private static let ABYLiteral = "ABY"
     private static let BBYLiteral = "BBY"

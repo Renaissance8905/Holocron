@@ -11,16 +11,16 @@
 public struct SWSchema: Codable {
 
     public struct Property: Codable {
-        var type: String
-        var format: String?
-        var description: String
+        let type: String
+        let format: String?
+        let description: String
     }
 
-    var description: String
-    var required: [String]
-    var type: String
-    var title: String
+    let description: String
+    let required: [String]
+    let type: String
+    let title: String
 
-    var properties: [Property] // [String: Property]
+    let properties: [Property] // [String: Property]
 
 }

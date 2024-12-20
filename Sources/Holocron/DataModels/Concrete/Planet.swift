@@ -6,19 +6,19 @@
 //
 
 public struct Planet: SWData, Identifiable {
-    public var metaData: SWMetaData
+    public let metaData: SWMetaData
     
-    public var name: String
-    public var diameter: Kilometers?
-    public var rotationPeriod: StandardHours?
-    public var orbitalPeriod: StandardDays?
-    public var gravity: String
-    public var population: Int?
-    public var climate: [String]
-    public var terrain: [String]
-    public var surfaceWater: Percentage?
-    private var residents: [SWPageLink]
-    private var films: [SWPageLink]
+    public let name: String
+    public let diameter: Kilometers?
+    public let rotationPeriod: StandardHours?
+    public let orbitalPeriod: StandardDays?
+    public let gravity: String
+    public let population: Int?
+    public let climate: [String]
+    public let terrain: [String]
+    public let surfaceWater: Percentage?
+    private let residents: [SWPageLink]
+    private let films: [SWPageLink]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

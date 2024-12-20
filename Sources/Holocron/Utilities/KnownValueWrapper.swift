@@ -5,8 +5,8 @@
 //  Created by Chris Spradling on 8/12/19.
 //
 
-@propertyWrapper public struct Known: Codable {
-        
+@propertyWrapper public struct Known: Codable, Sendable {
+
     private var value: String?
     
     public init(wrappedValue initialValue: String?) {

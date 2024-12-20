@@ -6,20 +6,20 @@
 //
 
 public struct Species: SWData, Identifiable {
-    public var metaData: SWMetaData
+    public let metaData: SWMetaData
     
-    public var name: String
+    public let name: String
     @Known public var classification: String?
-    public var designation: String
-    public var averageHeight: Centimeters?
-    public var averageLifespan: StandardYears?
-    public var eyeColors: [String]
-    public var hairColors: [String]
-    public var skinColors: [String]
+    public let designation: String
+    public let averageHeight: Centimeters?
+    public let averageLifespan: StandardYears?
+    public let eyeColors: [String]
+    public let hairColors: [String]
+    public let skinColors: [String]
     @Known public var language: String?
-    private var homeworld: SWPageLink?
-    private var people: [SWPageLink]
-    private var films: [SWPageLink]
+    private let homeworld: SWPageLink?
+    private let people: [SWPageLink]
+    private let films: [SWPageLink]
         
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

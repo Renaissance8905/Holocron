@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SWPageLink: Codable {
+struct SWPageLink: Codable, Sendable {
     let category: SWDataCategory
     let index: Int?
     let url: URL

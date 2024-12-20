@@ -8,21 +8,21 @@
 import Foundation
 
 public struct Film: SWData, Identifiable {
-    public var metaData: SWMetaData
+    public let metaData: SWMetaData
     
     public var name: String { return title }
     
-    public var title: String
-    public var episodeId: Int
-    public var openingCrawl: String
-    public var director: [String]
-    public var producer: [String]
-    public var releaseDate: Date
-    private var species: [SWPageLink]
-    private var vehicles: [SWPageLink]
-    private var characters: [SWPageLink]
-    private var planets: [SWPageLink]
-    private var starships: [SWPageLink]
+    public let title: String
+    public let episodeId: Int
+    public let openingCrawl: String
+    public let director: [String]
+    public let producer: [String]
+    public let releaseDate: Date
+    private let species: [SWPageLink]
+    private let vehicles: [SWPageLink]
+    private let characters: [SWPageLink]
+    private let planets: [SWPageLink]
+    private let starships: [SWPageLink]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

@@ -6,21 +6,21 @@
 //
 
 public struct Person: SWData, Identifiable {
-    public var metaData: SWMetaData
+    public let metaData: SWMetaData
     
-    public var name: String
-    public var birthYear: SWYear?
+    public let name: String
+    public let birthYear: SWYear?
     @Known public var eyeColor: String?
     @Known public var gender: String?
     @Known public var hairColor: String?
-    public var height: Centimeters?
-    public var mass: Kilograms?
-    public var skinColor: String
-    private var homeworld: SWPageLink?
-    private var films: [SWPageLink]
-    private var species: [SWPageLink]
-    private var vehicles: [SWPageLink]
-    private var starships: [SWPageLink]
+    public let height: Centimeters?
+    public let mass: Kilograms?
+    public let skinColor: String
+    private let homeworld: SWPageLink?
+    private let films: [SWPageLink]
+    private let species: [SWPageLink]
+    private let vehicles: [SWPageLink]
+    private let starships: [SWPageLink]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
