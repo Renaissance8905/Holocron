@@ -17,51 +17,27 @@ final class APISearchTests: HolocronTestCase {
         
     }
     
-    func testBasicSearch() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.searchPeople(term: "sky") { data in
-                
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.count, 3)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                
-                waiter.fulfill()
-                
-            }
-            
+    func testBasicSearch() async {
+
+        do {
+            let people = try await api.searchPeople(term: "sky")
+            XCTAssertEqual(people.count, 3)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
     
-    func testSearchAll() {
-        doAndWait { [weak self] (waiter) in
-            self?.api.searchAll(term: "sky") { result in
-                
-                switch result {
-                    
-                case .success(let items):
-                    items.forEach {
-                        print($0.name)
-                    }
-                    XCTAssertEqual(items.count, 4)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                    
-                }
-                
-                waiter.fulfill()
-                
-            }
-            
+    func testSearchAll() async {
+
+
+        do {
+            let people = try await api.searchAll(term: "sky")
+            XCTAssertEqual(people.count, 4)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
 
 }

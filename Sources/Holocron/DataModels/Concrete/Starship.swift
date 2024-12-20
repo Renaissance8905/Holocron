@@ -47,14 +47,12 @@ public struct Starship: SWVehicleType, Identifiable {
         
     }
     
-    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
-        api.fetchSet(films, completion)
-        
+    public func getFilms(_ api: SWAPI) async throws -> [Film] {
+        try await api.fetchSet(films)
     }
     
-    public func getPilots(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
-        api.fetchSet(pilots, completion)
-        
+    public func getPilots(_ api: SWAPI) async throws -> [Person] {
+        try await api.fetchSet(pilots)
     }
 
 }

@@ -65,7 +65,7 @@ extension Double {
             case .standardDays:     return "%@ Standard Day\(plural)"
             case .standardHours:    return "%@ Standard Hour\(plural)"
             case .percentage:       return "%@%%"
-            case .credits:          return "%@ credit\(unit)"
+            case .credits:          return "%@ credit\(plural)"
             case .custom(let unit): return "%@ \(unit)"
                 
             }

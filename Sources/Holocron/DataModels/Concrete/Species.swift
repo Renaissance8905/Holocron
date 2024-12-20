@@ -42,20 +42,17 @@ public struct Species: SWData, Identifiable {
     }
     
     
-    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
-        api.fetchSet(films, completion)
-        
+    public func getFilms(_ api: SWAPI) async throws -> [Film] {
+        try await api.fetchSet(films)
     }
     
-    public func getPeople(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
-        api.fetchSet(people, completion)
-        
+    public func getPeople(_ api: SWAPI) async throws -> [Person] {
+        try await api.fetchSet(people)
     }
     
-    public func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
-        guard let homeworld = homeworld else { return completion(.failure(.noData))}
-        api.fetchOne(homeworld, completion)
-        
+    public func getHomeworld(_ api: SWAPI) async throws -> Planet {
+        guard let homeworld else { throw SWError.noData }
+        return try await api.fetchOne(homeworld)
     }
 
 }

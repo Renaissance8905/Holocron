@@ -42,33 +42,35 @@ public struct Film: SWData, Identifiable {
         starships       = try container.decode([SWPageLink].self, forKey: .starships)
         
     }
-    
+
     public var releaseDateString: String {
         return DateFormatter.dateOnly.string(from: releaseDate)
-    }
-    
-    public func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
-        api.fetchSet(species, completion)
-        
-    }
-    
-    public func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
-        api.fetchSet(vehicles, completion)
-        
-    }
-    
-    public func getCharacters(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Person>) {
-        api.fetchSet(characters, completion)
-        
+
     }
 
-    public func getStarships(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Starship>) {
-        api.fetchSet(starships, completion)
+    public func getSpecies(_ api: SWAPI) async throws -> [Species] {
+        try await api.fetchSet(species)
+
     }
-    
-    public func getPlanets(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Planet>) {
-        api.fetchSet(planets, completion)
-        
+
+    public func getVehicles(_ api: SWAPI) async throws -> [Vehicle] {
+        try await api.fetchSet(vehicles)
+
     }
-    
+
+    public func getCharacters(_ api: SWAPI) async throws -> [Person] {
+        try await api.fetchSet(characters)
+
+    }
+
+    public func getStarships(_ api: SWAPI) async throws -> [Starship] {
+        try await api.fetchSet(starships)
+
+    }
+
+    public func getPlanets(_ api: SWAPI) async throws -> [Planet] {
+        try await api.fetchSet(planets)
+
+    }
+
 }

@@ -43,28 +43,28 @@ public struct Person: SWData, Identifiable {
         
     }
     
-    public func getFilms(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Film>) {
-        api.fetchSet(films, completion)
-        
+    public func getFilms(_ api: SWAPI) async throws -> [Film] {
+        try await api.fetchSet(films)
+
     }
     
-    public func getSpecies(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Species>) {
-        api.fetchSet(species, completion)
-        
+    public func getSpecies(_ api: SWAPI) async throws -> [Species] {
+        try await api.fetchSet(species)
+
     }
     
-    public func getVehicles(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Vehicle>) {
-        api.fetchSet(vehicles, completion)
-        
+    public func getVehicles(_ api: SWAPI) async throws -> [Vehicle] {
+        try await api.fetchSet(vehicles)
+
     }
     
-    public func getStarships(_ api: SWAPI, _ completion: @escaping SWCollectionCompletion<Starship>) {
-        api.fetchSet(starships, completion)
+    public func getStarships(_ api: SWAPI) async throws -> [Starship] {
+        try await api.fetchSet(starships)
     }
     
-    public func getHomeworld(_ api: SWAPI, _ completion: @escaping SWCompletion<Planet>) {
-        guard let homeworld = homeworld else { return completion(.failure(.noData)) }
-        api.fetchOne(homeworld, completion)
+    public func getHomeworld(_ api: SWAPI) async throws -> Planet {
+        guard let homeworld else { throw SWError.noData }
+        return try await api.fetchOne(homeworld)
         
     }
     

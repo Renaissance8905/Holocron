@@ -16,8 +16,8 @@ class Cacheable<T:SWData> {
     }
     
     typealias CacheValue<Q:SWData> = (timestamp: Date, object: Q)
-    typealias CacheObject<T:SWData> = [SWIdentifier: CacheValue<T>]
-    
+    typealias CacheObject<C:SWData> = [SWIdentifier: CacheValue<C>]
+
     private var cache: CacheObject<T> = [:]
     
     private func isExpired(_ date: Date) -> Bool {

@@ -23,143 +23,98 @@ final class APIBatchGetTests: HolocronTestCase {
         
     }
     
-    func testGetPeople() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Person>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.first?.name, "Luke Skywalker")
-                    XCTAssertEqual(object.count, self?.limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+    func testGetPeople() async {
 
+        do {
+            let object: [Person] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.first?.name, "Luke Skywalker")
+            XCTAssertEqual(object.count, self.limit)
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
+        }
+
+    }
+    
+    func testGetVehicles() async {
+
+        do {
+            let object: [Vehicle] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.first?.name, "Sand Crawler")
+            XCTAssertEqual(object.count, self.limit)
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
+        }
+
+    }
+    
+    func testGetStarships() async {
+
+        do {
+            let object: [Starship] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.first?.name, "CR90 corvette")
+            XCTAssertEqual(object.count, self.limit)
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
         }
         
     }
     
-    func testGetVehicles() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Vehicle>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.first?.name, "Sand Crawler")
-                    XCTAssertEqual(object.count, self?.limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+    func testGetPlanets() async {
 
+        do {
+            let object: [Planet] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.first?.name, "Tatooine")
+            XCTAssertEqual(object.count, self.limit)
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
         }
         
     }
     
-    func testGetStarships() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Starship>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.first?.name, "Executor")
-                    XCTAssertEqual(object.count, self?.limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+    func testGetFilms() async {
 
+        do {
+            let object: [Film] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.first?.name, "A New Hope")
+            XCTAssertEqual(object.count, 7) // small data set
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
     
-    func testGetPlanets() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Planet>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.first?.name, "Alderaan")
-                    XCTAssertEqual(object.count, self?.limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+    func testGetSpecies() async {
 
+        do {
+            let object: [Species] = try await self.api.get(limit: self.limit)
+            XCTAssertEqual(object.count, self.limit)
+
+        } catch {
+
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
     
-    func testGetFilms() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Film>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.first?.name, "A New Hope")
-                    XCTAssertEqual(object.count, 7) // small data set
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+    func testGetEverything() async {
 
-        }
-        
-    }
-    
-    func testGetSpecies() {
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.get(limit: self?.limit) { (data: SWCollectionResult<Species>) in
-                switch data {
-                case .success(let object):
-                    XCTAssertEqual(object.count, self?.limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+        do {
+            let items: [SWData] = try await self.api.getAll()
+            XCTAssertEqual(items.count, 170)
 
-        }
-        
-    }
-    
-    func testGetEverything() {
-        doAndWait { [weak self] (waiter) in
-            self?.api.getAll { result in
-                
-                switch result {
-                    
-                case .success(let items):
-                    XCTAssertEqual(items.count, 268)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                    
-                }
-                
-                waiter.fulfill()
-                
-            }
-            
+        } catch {
+
+            XCTFail(error.localizedDescription)
         }
         
     }

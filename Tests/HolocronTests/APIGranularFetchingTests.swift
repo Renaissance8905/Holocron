@@ -11,26 +11,12 @@ final class APIGranularFetchingTests: HolocronTestCase {
             
     }
         
-    func testGetSingle() {
+    func testGetSingle() async {
         do {
             let link = try SWPageLink(Person.self, index: 9)
-            
-            doAndWait { [weak self] waiter in
-                
-                self?.api.fetchOne(link) { (data: SWResult<Person>) in
-                    switch data {
-                    case .success(let object):
-                        XCTAssertEqual(object.name, "Biggs Darklighter")
-                        
-                    case .failure(let error):
-                        XCTFail(error.localizedDescription)
-                    }
-                    
-                    waiter.fulfill()
-                    
-                }
 
-            }
+            let object: Person = try await self.api.fetchOne(link)
+            XCTAssertEqual(object.name, "Biggs Darklighter")
             
         } catch let error {
             XCTFail(error.localizedDescription)
@@ -39,43 +25,13 @@ final class APIGranularFetchingTests: HolocronTestCase {
         
     }
     
-    func testGetSet() {
+    func testGetSet() async {
         do {
             let link = try SWPageLink(Person.self, index: 1)
-            
-            doAndWait { [weak self] waiter in
-                
-                guard let api = self?.api else {
-                    XCTFail("No Self")
-                    return
-                }
-                
-                api.fetchOne(link) { (data: SWResult<Person>) in
-                    switch data {
-                    case .success(let object):
-                        
-                        object.getFilms(api) { (result: SWCollectionResult<Film>) in
-                            
-                            switch result {
-                            case .success(let films):
-                                XCTAssertEqual(films.count, 5)
-                                
-                            case .failure(let error):
-                                XCTFail(error.localizedDescription)
-                            }
 
-                            waiter.fulfill()
-
-                        }
-
-                    case .failure(let error):
-                        XCTFail(error.localizedDescription)
-                        
-                    }
-                    
-                }
-            
-            }
+            let object: Person = try await self.api.fetchOne(link)
+            let films = try await object.getFilms(self.api)
+            XCTAssertEqual(films.count, 5)
 
         } catch let error {
             XCTFail(error.localizedDescription)
@@ -84,86 +40,25 @@ final class APIGranularFetchingTests: HolocronTestCase {
                 
     }
     
-    func testGetSeveralSets() {
-        
-        doAndWait { [weak self] waiter in
-            self?.api.getPeople({ (result) in
-                switch result {
-                case .success(let people):
-                    
-                    guard let `self` = self, let anakin = people.first(where: { $0.name == "Anakin Skywalker" }) else {
-                        XCTFail("No Anakin?")
-                        return
-                    }
-                    
-                    let dispatch = DispatchGroup()
-                    
-                    var stuff = [SWData]()
-                    
-                    dispatch.enter()
-                    anakin.getFilms(self.api) { result in
-                        switch result {
-                        case .success(let data):
-                            stuff.append(contentsOf: data)
-                            dispatch.leave()
-                            
-                        case .failure(let error):
-                            XCTFail(error.localizedDescription)
-                            
-                        }
-                    }
+    func testGetSeveralSets() async throws {
 
-                    dispatch.enter()
-                    anakin.getVehicles(self.api) { result in
-                        switch result {
-                        case .success(let data):
-                            stuff.append(contentsOf: data)
-                            dispatch.leave()
-                            
-                        case .failure(let error):
-                            XCTFail(error.localizedDescription)
-                            
-                        }
-                    }
-
-                    dispatch.enter()
-                    anakin.getStarships(self.api) { result in
-                        switch result {
-                        case .success(let data):
-                            stuff.append(contentsOf: data)
-                            dispatch.leave()
-                            
-                        case .failure(let error):
-                            XCTFail(error.localizedDescription)
-                            
-                        }
-                    }
-
-                    dispatch.enter()
-                    anakin.getHomeworld(self.api) { result in
-                        switch result {
-                        case .success(let data):
-                            stuff.append(data)
-                            dispatch.leave()
-                            
-                        case .failure(let error):
-                            XCTFail(error.localizedDescription)
-                            
-                        }
-                    }
-                    
-                    dispatch.notify(queue: .main) {
-                        XCTAssertEqual(stuff.count, 9)
-                        waiter.fulfill()
-                    }
-
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-            })
+        let people = try await self.api.getPeople()
+        guard let anakin = people.first(where: { $0.name == "Anakin Skywalker" }) else {
+            XCTFail("No Anakin?")
+            return
         }
-        
+
+        let starships = try await anakin.getStarships(self.api)
+        XCTAssertEqual(starships.count, 3)
+        let vehicles = try await anakin.getVehicles(self.api)
+        XCTAssertEqual(vehicles.count, 2)
+        let planets = try await anakin.getHomeworld(self.api)
+        XCTAssertEqual(planets.name, "Tatooine")
+        let films = try await anakin.getFilms(self.api)
+        XCTAssertEqual(films.count, 3)
+        let species = try await anakin.getSpecies(self.api)
+        XCTAssertEqual(species.count, 1)
+
     }
     
 }

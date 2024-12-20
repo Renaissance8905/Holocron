@@ -22,6 +22,3 @@ public extension SWData where Self: Identifiable {
     }
     
 }
-
-
-

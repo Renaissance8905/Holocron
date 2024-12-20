@@ -14,100 +14,65 @@ final class APILimiterTests: HolocronTestCase {
             
     }
         
-    func testRequestModerateLimit() {
+    func testRequestModerateLimit() async {
         let limit: Int? = 24
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.getPeople(limit: limit) { (data) in
-                switch data {
-                case .success(let people):
-                    XCTAssertEqual(people.count, limit)
-                    
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-                
-            }
 
+
+        do {
+            let people = try await api.getPeople(limit: limit)
+            XCTAssertEqual(people.count, limit)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
         
     }
     
-    func testRequestZeroLimit() {
+    func testRequestZeroLimit() async {
         let limit: Int? = 0
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.getPeople(limit: limit) { (data) in
-                switch data {
-                case .success(let people):
-                    XCTAssertEqual(people.count, limit)
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
+
+        do {
+            let people = try await api.getPeople(limit: limit)
+            XCTAssertEqual(people.count, limit)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
         
     }
     
-    func testRequestNegativeLimit() {
+    func testRequestNegativeLimit() async {
         let limit: Int? = -24
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.getPeople(limit: limit) { (data) in
-                switch data {
-                case .success(let people):
-                    XCTAssertEqual(people.count, 0)
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
-            
+
+        do {
+            let people = try await api.getPeople(limit: limit)
+            XCTAssertEqual(people.count, 0)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
     
-    func testRequestNilLimit() {
+    func testRequestNilLimit() async {
         let limit: Int? = nil
-        
-        doAndWait { [weak self] waiter in
-            
-            self?.api.getPeople(limit: limit) { (data) in
-                switch data {
-                case .success(let people):
-                    XCTAssertEqual(people.count, 87)
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
 
+        do {
+            let people = try await api.getPeople(limit: limit)
+            XCTAssertEqual(people.count, 87)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
         
     }
     
-    func testRequestCrazyHighLimit() {
+    func testRequestCrazyHighLimit() async {
         let limit: Int? = 1000
-        
-        doAndWait { [weak self] waiter in
 
-            self?.api.getPeople(limit: limit) { (data) in
-                switch data {
-                case .success(let people):
-                    XCTAssertEqual(people.count, 87)
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                }
-                waiter.fulfill()
-            }
-
+        do {
+            let people = try await api.getPeople(limit: limit)
+            XCTAssertEqual(people.count, 87)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
-        
+
     }
     
 }
