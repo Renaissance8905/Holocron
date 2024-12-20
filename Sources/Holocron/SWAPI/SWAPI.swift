@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class SWAPI {
+public class SWAPI: Sendable {
 
     internal let cache: SWCacheProtocol?
     internal let timeout: TimeInterval = 4.0
