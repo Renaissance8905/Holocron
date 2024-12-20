@@ -37,12 +37,12 @@ extension SWAPI {
     
     func fetchOne<T: SWData>(_ link: SWPageLink) async throws -> T {
 
-        if let cached: T = cache?.object(for: link.identifier) {
+        if let cached: T = await cache?.object(for: link.identifier) {
             return cached
         }
 
         let response: T = try await codableRequest(link.url)
-        self.cache?.add(response)
+        await self.cache?.add(response)
         return response
     }
     
@@ -59,7 +59,9 @@ extension SWAPI {
         switch self.checkLimit(limit, next: response.next, data: resultSet) {
 
         case .finished(let finalResults):
-            finalResults.forEach { self.cache?.add($0) }
+            for result in finalResults {
+                await self.cache?.add(result)
+            }
             return finalResults
 
         case .continue(let next):

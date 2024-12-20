@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SWInMemoryCache: SWCacheProtocol {
+actor SWInMemoryCache: SWCacheProtocol {
     
     static let timeToLive: TimeInterval = 1.days
     

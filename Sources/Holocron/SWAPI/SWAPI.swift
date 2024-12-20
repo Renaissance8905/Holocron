@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class SWAPI: Sendable {
+final public class SWAPI: Sendable {
 
     internal let cache: SWCacheProtocol?
     internal let timeout: TimeInterval = 4.0
@@ -23,7 +23,7 @@ public class SWAPI: Sendable {
     }()
     
     
-    internal lazy var decoder: JSONDecoder = {
+    internal let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
